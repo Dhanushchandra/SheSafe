@@ -1,5 +1,8 @@
 const route = require("express").Router();
 
+const multer = require("multer");
+const path = require("path");
+
 const {
   userSignup,
   userLogin,
@@ -12,6 +15,7 @@ const {
   medicalSurvey,
   panicAlert,
   updateLocation,
+  uploadPhoto,
 } = require("../controller/userController");
 
 const {
@@ -37,5 +41,25 @@ route.delete("/removecontact/:cid", verifyToken, removeContacts);
 route.put("/updatemedicals/:uid", [verifyToken, verifyUser], medicalSurvey);
 route.post("/panic/:uid", [verifyToken, verifyUser], panicAlert);
 route.post("/live/:uid/:tid", [verifyToken, verifyUser], updateLocation);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    const { uid } = req.params;
+    const timestamp = Date.now();
+    const fileExtension = path.extname(file.originalname);
+    cb(null, `${uid}_${timestamp}${fileExtension}`);
+  },
+});
+
+const upload = multer({ storage });
+
+route.post(
+  "/upload/:uid/",
+  [verifyToken, upload.single("photo")],
+  updateLocation
+);
 
 module.exports = route;

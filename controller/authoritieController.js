@@ -1,3 +1,6 @@
+const fs = require("fs");
+const path = require("path");
+
 const Authoritie = require("../models/AuthoritieSchema");
 const LiveSchema = require("../models/LiveSchema");
 const SoS = require("../models/SosSchema");
@@ -95,5 +98,41 @@ exports.getLiveLocation = async (req, res) => {
   res.status(400).send({
     message: "Location found",
     data: location,
+  });
+};
+
+//Get Image
+
+const getTodayDateString = () => {
+  const today = new Date();
+  return today.toISOString().split("T")[0]; // format as YYYY-MM-DD
+};
+
+exports.getSosPhotos = async (req, res) => {
+  const { uid } = req.params;
+  const uploadsFolder = path.join(__dirname, "../uploads");
+  const todayDate = getTodayDateString();
+
+  fs.readdir(uploadsFolder, (err, files) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: "Error reading uploads directory" });
+    }
+
+    const todayFile = files.find((file) => {
+      const [fileUid, fileTimestamp] = file.split("_");
+      const fileDate = new Date(parseInt(fileTimestamp, 10))
+        .toISOString()
+        .split("T")[0];
+      return fileUid === uid && fileDate === todayDate;
+    });
+
+    if (!todayFile) {
+      return res.status(404).json({ message: "No photo found for today" });
+    }
+
+    const filePath = path.join(uploadsFolder, todayFile);
+    res.sendFile(filePath);
   });
 };
