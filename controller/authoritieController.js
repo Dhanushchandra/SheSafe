@@ -1,4 +1,5 @@
 const Authoritie = require("../models/AuthoritieSchema");
+const LiveSchema = require("../models/LiveSchema");
 const SoS = require("../models/SosSchema");
 
 const { generateToken } = require("../utils/helpers/tokenGenerate");
@@ -74,5 +75,25 @@ exports.updateSos = async (req, res) => {
   res.status(200).send({
     message: "Update Success",
     data: updateSos,
+  });
+};
+
+exports.getLiveLocation = async (req, res) => {
+  const tid = req.params.tid;
+
+  const location = await LiveSchema.findOne({
+    trip: tid,
+  });
+
+  if (!location) {
+    res.status(400).send({
+      message: "Location not found",
+    });
+    return;
+  }
+
+  res.status(400).send({
+    message: "Location found",
+    data: location,
   });
 };

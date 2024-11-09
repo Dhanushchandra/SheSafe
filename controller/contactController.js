@@ -1,4 +1,5 @@
 const Contact = require("../models/ContactSchema");
+const LiveSchema = require("../models/LiveSchema");
 const SoS = require("../models/SosSchema");
 const Trip = require("../models/TripSchema");
 
@@ -85,5 +86,25 @@ exports.triggerSos = async (req, res) => {
 
   res.status(200).send({
     message: "SOS Sent",
+  });
+};
+
+exports.getLiveLocation = async (req, res) => {
+  const tid = req.params.tid;
+
+  const location = await LiveSchema.findOne({
+    trip: tid,
+  });
+
+  if (!location) {
+    res.status(400).send({
+      message: "Location not found",
+    });
+    return;
+  }
+
+  res.status(400).send({
+    message: "Location found",
+    data: location,
   });
 };

@@ -11,6 +11,7 @@ const {
   removeContacts,
   medicalSurvey,
   panicAlert,
+  updateLocation,
 } = require("../controller/userController");
 
 const {
@@ -35,5 +36,6 @@ route.get("/addcontact/:uid", [verifyToken, verifyUser], getAllContacts);
 route.delete("/removecontact/:cid", verifyToken, removeContacts);
 route.put("/updatemedicals/:uid", [verifyToken, verifyUser], medicalSurvey);
 route.post("/panic/:uid", [verifyToken, verifyUser], panicAlert);
+route.post("/live/:uid/:tid", [verifyToken, verifyUser], updateLocation);
 
 module.exports = route;

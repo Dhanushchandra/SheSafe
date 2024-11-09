@@ -1,6 +1,7 @@
 const User = require("../models/UserSchema");
 const Trip = require("../models/TripSchema");
 const Contact = require("../models/ContactSchema");
+const LiveSchema = require("../models/LiveSchema");
 const SoS = require("../models/SosSchema");
 
 const {
@@ -246,5 +247,43 @@ exports.panicAlert = async (req, res) => {
 
   res.status(200).send({
     message: "SOS Sent",
+  });
+};
+
+exports.updateLocation = async (req, res) => {
+  const uid = req.params.uid;
+  const tid = req.params.tid;
+
+  const { location } = req.body;
+
+  const exist = await LiveSchema.findOne({
+    trip: tid,
+  });
+
+  if (exist) {
+    const update = await LiveSchema.updateOne(
+      {
+        trip: tid,
+      },
+      { location },
+      { new: true }
+    );
+
+    res.status(200).send({
+      message: "Location Updated",
+    });
+    return;
+  }
+
+  const livelocation = new LiveSchema({
+    userId: uid,
+    trip: tid,
+    location,
+  });
+
+  await livelocation.save();
+
+  res.status(200).send({
+    message: "Location Updated",
   });
 };
