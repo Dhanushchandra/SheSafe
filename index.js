@@ -6,12 +6,14 @@ const bodyParser = require("body-parser");
 
 const userRoute = require("./routes/userRoutes");
 const contactRoute = require("./routes/contactRoutes");
+const authoritieRoute = require("./routes/authoritieRoutes");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/user", userRoute);
 app.use("/api/contact", contactRoute);
+app.use("/api/authoritie", authoritieRoute);
 
 const PORT = process.env.PORT;
 
