@@ -7,3 +7,13 @@ exports.verifyUser = async (req, res, next) => {
   }
   next();
 };
+
+exports.verifyContact = async (req, res, next) => {
+  if (req.id !== req.params.cid) {
+    return res.status(401).send({
+      auth: false,
+      error: "You are not authorized to access this data.",
+    });
+  }
+  next();
+};

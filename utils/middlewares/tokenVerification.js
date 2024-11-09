@@ -21,7 +21,6 @@ function verifyToken(req, res, next) {
     }
 
     // save decoded token to request object
-
     req.id = decoded.id;
     next();
   });

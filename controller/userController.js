@@ -227,6 +227,7 @@ exports.panicAlert = async (req, res) => {
     const sos = new SoS({
       location,
       userId,
+      from: "self",
     });
     await sos.save();
 
@@ -239,6 +240,7 @@ exports.panicAlert = async (req, res) => {
   const sos = new SoS({
     trip: tripid._id,
     location,
+    from: "self",
   });
   await sos.save();
 

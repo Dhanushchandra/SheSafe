@@ -8,16 +8,18 @@ const SosSchema = mongoose.Schema({
   location: {
     latitude: {
       type: Number,
-      required: true,
     },
     longitude: {
       type: Number,
-      required: true,
     },
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+  },
+  from: {
+    type: String,
+    required: true,
   },
   status: {
     type: Boolean,
