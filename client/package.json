@@ -9,10 +9,15 @@
     "formik": "^2.4.6",
     "joi": "^17.13.3",
     "joi-browser": "^13.4.0",
+<<<<<<< HEAD
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",
+=======
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+>>>>>>> e4145a9ccc95177e61fb5e6bb783c3f2880462c1
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
