@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UserNavbar from "../../components/user/NavBar";
+import { USER_API } from "../../api";
 
 const MedicalPage = () => {
   // Access the userId from the URL using useParams
@@ -35,19 +36,16 @@ const MedicalPage = () => {
     const token = localStorage.getItem("token"); // Retrieve token from localStorage
 
     try {
-      const response = await fetch(
-        `http://localhost:8060/api/user/updatemedicals/${userId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            medicals: medicalInfo,
-          }),
-        }
-      );
+      const response = await fetch(`${USER_API}/updatemedicals/${userId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          medicals: medicalInfo,
+        }),
+      });
 
       const data = await response.json();
 

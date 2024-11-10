@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import UserNavbar from "../../components/user/NavBar";
+import { USER_API } from "../../api";
 
 const ContactsPage = () => {
   const { userId } = useParams();
@@ -14,15 +15,12 @@ const ContactsPage = () => {
   // Fetch contacts from API when the component mounts
   const fetchContacts = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch(
-      `http://localhost:8060/api/user/getcontact/${userId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${USER_API}/getcontact/${userId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await response.json();
     if (response.ok) {
       setContacts(data.data || []);
@@ -39,17 +37,14 @@ const ContactsPage = () => {
   // Add a new contact
   const handleAddContact = async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch(
-      `http://localhost:8060/api/user/addcontact/${userId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(newContact),
-      }
-    );
+    const response = await fetch(`${USER_API}/addcontact/${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newContact),
+    });
 
     const data = await response.json();
     if (response.ok) {
@@ -65,15 +60,12 @@ const ContactsPage = () => {
     const token = localStorage.getItem("token");
     console.log(id);
 
-    const response = await fetch(
-      `http://localhost:8060/api/user/removecontact/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${USER_API}/removecontact/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await response.json();
     if (response.ok) {
       // setContacts(contacts.filter((contact) => contact.id !== id)); // Remove deleted contact

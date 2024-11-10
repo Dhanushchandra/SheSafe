@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "../styles/UserNavbar.css";
+import { USER_API } from "../../../api";
 
 const UserNavbar = () => {
   const { userId } = useParams();
@@ -48,17 +49,14 @@ const UserNavbar = () => {
           // Check if location has been unchanged for 20 seconds
           if (Date.now() - lastChangeTime >= 20000) {
             // Trigger panic API
-            const panicResponse = await fetch(
-              `http://localhost:8060/api/user/panic/${userId}`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ location }),
-              }
-            );
+            const panicResponse = await fetch(`${USER_API}/panic/${userId}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ location }),
+            });
 
             if (!panicResponse.ok) {
               throw new Error("Failed to trigger panic alert");
@@ -75,17 +73,14 @@ const UserNavbar = () => {
         }
 
         // Send the location data to the live tracking API
-        const response = await fetch(
-          `http://localhost:8060/api/user/live/${userId}/${tripId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ location }),
-          }
-        );
+        const response = await fetch(`${USER_API}/live/${userId}/${tripId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ location }),
+        });
 
         if (!response.ok) {
           throw new Error("Failed to send location data");

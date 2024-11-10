@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import UserNavbar from "../../components/user/NavBar";
+import { USER_API } from "../../api";
 
 const UserDashBoard = () => {
   const { userId } = useParams();
@@ -13,15 +14,12 @@ const UserDashBoard = () => {
     const token = localStorage.getItem("token");
 
     try {
-      const response = await fetch(
-        `http://localhost:8060/api/user/gettrip/${userId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await fetch(`${USER_API}/gettrip/${userId}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch trip details");
@@ -53,7 +51,7 @@ const UserDashBoard = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8060/api/user/updatetrip/${tripDetails._id}`,
+        `${USER_API}/updatetrip/${tripDetails._id}`,
         {
           method: "PUT",
           headers: {
@@ -101,17 +99,14 @@ const UserDashBoard = () => {
       const location = await getCurrentLocation();
 
       // Send the location in the Panic request
-      const response = await fetch(
-        `http://localhost:8060/api/user/panic/${userId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ location }),
-        }
-      );
+      const response = await fetch(`${USER_API}/panic/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ location }),
+      });
 
       if (!response.ok) {
         throw new Error("Panic request failed");

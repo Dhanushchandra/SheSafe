@@ -3,6 +3,7 @@ import AuthNavBar from "../../components/authoritie/AuthNavBar";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { AUTH_API } from "../../api";
 
 const AuthDashboard = () => {
   const [sosData, setSosData] = useState([]);
@@ -15,16 +16,13 @@ const AuthDashboard = () => {
     // Fetch SOS data
     const fetchSosData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8060/api/authoritie/sos",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${AUTH_API}/sos`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (!response.ok) {
           throw new Error("Failed to fetch SOS data");
@@ -42,7 +40,7 @@ const AuthDashboard = () => {
     const fetchLiveLocations = () => {
       sosData.forEach((sos) => {
         const tripId = sos.trip._id;
-        fetch(`http://localhost:8060/api/authoritie/livelocation/${tripId}`, {
+        fetch(`${AUTH_API}/livelocation/${tripId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -66,7 +64,7 @@ const AuthDashboard = () => {
     const fetchVehiclePhotos = async (sosData, token) => {
       const photoPromises = sosData.map((sos) =>
         fetch(
-          `http://localhost:8060/api/authoritie/getphoto/${sos.userId._id}`, // Fixed path
+          `${AUTH_API}/getphoto/${sos.userId._id}`, // Fixed path
           {
             method: "GET",
             headers: {

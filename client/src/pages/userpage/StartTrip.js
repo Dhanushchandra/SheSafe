@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import UserNavbar from "../../components/user/NavBar";
+import { USER_API } from "../../api";
 
 const StartTrip = () => {
   const { userId } = useParams();
@@ -58,37 +59,31 @@ const StartTrip = () => {
       console.log(currentState);
 
       // First API call: Start Trip
-      const tripResponse = await fetch(
-        `http://localhost:8060/api/user/starttrip/${userId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            startLocation,
-            endLocation,
-            currentstate: currentState,
-          }),
-        }
-      );
+      const tripResponse = await fetch(`${USER_API}/starttrip/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          startLocation,
+          endLocation,
+          currentstate: currentState,
+        }),
+      });
 
       if (!tripResponse.ok) {
         throw new Error("Failed to start trip");
       }
 
       // Second API call: Upload Photo
-      const photoResponse = await fetch(
-        `http://localhost:8060/api/user/upload/${userId}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Pass token here for file upload
-          },
-          body: formData, // Send FormData object for file upload
-        }
-      );
+      const photoResponse = await fetch(`${USER_API}/upload/${userId}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`, // Pass token here for file upload
+        },
+        body: formData, // Send FormData object for file upload
+      });
 
       if (!photoResponse.ok) {
         throw new Error("Failed to upload photo");

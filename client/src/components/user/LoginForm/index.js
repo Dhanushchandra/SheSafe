@@ -2,6 +2,7 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Joi from "joi-browser";
 import { useNavigate } from "react-router-dom";
+const { USER_API } = require("../../../api");
 
 // Joi schema for login validation
 const schema = Joi.object({
@@ -23,7 +24,7 @@ const validate = (values) => {
 
 // API call function
 const loginUser = async (email, password) => {
-  const response = await fetch("http://localhost:8060/api/user/login", {
+  const response = await fetch(`${USER_API}/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
