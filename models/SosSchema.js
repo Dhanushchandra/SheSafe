@@ -25,6 +25,10 @@ const SosSchema = mongoose.Schema({
     type: Boolean,
     default: true,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model("SoS", SosSchema);

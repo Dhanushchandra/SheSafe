@@ -36,7 +36,7 @@ route.post(
   [verifyToken, verifyUser, checkContactDuplicateEmail],
   addContact
 );
-route.get("/addcontact/:uid", [verifyToken, verifyUser], getAllContacts);
+route.get("/getcontact/:uid", [verifyToken, verifyUser], getAllContacts);
 route.delete("/removecontact/:cid", verifyToken, removeContacts);
 route.put("/updatemedicals/:uid", [verifyToken, verifyUser], medicalSurvey);
 route.post("/panic/:uid", [verifyToken, verifyUser], panicAlert);

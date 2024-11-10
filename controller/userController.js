@@ -50,7 +50,7 @@ exports.userLogin = async (req, res) => {
       email: user.email,
     });
 
-    res.status(400).send({
+    res.status(200).send({
       message: "Login Success",
       data: {
         id: user._id,
@@ -58,6 +58,7 @@ exports.userLogin = async (req, res) => {
         email: user.email,
         phone: user.phone,
         aadhar: user.aadhar,
+        medicals: user.medicals,
       },
       token,
     });
@@ -109,6 +110,18 @@ exports.cancelTrips = async (req, res) => {
   const trip = await Trip.findOneAndUpdate(
     {
       _id: tripid,
+    },
+    {
+      status: false,
+    },
+    {
+      new: true,
+    }
+  );
+
+  const sos = await SoS.findOneAndUpdate(
+    {
+      trip: tripid,
     },
     {
       status: false,
@@ -225,15 +238,15 @@ exports.panicAlert = async (req, res) => {
   });
 
   if (!tripid) {
-    const sos = new SoS({
-      location,
-      userId,
-      from: "self",
-    });
-    await sos.save();
+    // const sos = new SoS({
+    //   location,
+    //   userId,
+    //   from: "self",
+    // });
+    // await sos.save();
 
-    res.status(200).send({
-      message: "SOS Sent",
+    res.status(400).send({
+      message: "SOS not Sent",
     });
     return;
   }
@@ -241,6 +254,7 @@ exports.panicAlert = async (req, res) => {
   const sos = new SoS({
     trip: tripid._id,
     location,
+    userId,
     from: "self",
   });
   await sos.save();
@@ -294,10 +308,8 @@ exports.uploadPhoto = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "No file uploaded" });
   }
-  res
-    .status(200)
-    .json({
-      message: "File uploaded successfully",
-      filename: req.file.filename,
-    });
+  res.status(200).json({
+    message: "File uploaded successfully",
+    filename: req.file.filename,
+  });
 };

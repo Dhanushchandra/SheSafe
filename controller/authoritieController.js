@@ -38,7 +38,9 @@ exports.login = async (req, res) => {
 exports.sosList = async (req, res) => {
   const sos = await SoS.find({
     status: true,
-  }).populate("trip");
+  })
+    .populate("trip")
+    .populate("userId");
 
   if (!sos) {
     res.status(404).send({
